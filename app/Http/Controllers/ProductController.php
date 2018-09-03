@@ -15,12 +15,12 @@ class ProductController extends Controller
     {
       $method = $request->method();
       if ($request->ajax() && $request->isMethod('get')) {
-        $products = Product::paginate(1);
+        $products = Product::paginate(5);
         $products = array('products' => $products , 'is' => false);
         $view = view('products.index',$products)->render();
         return response()->json(['html'=>$view]);
       } else {
-        $products = Product::paginate(1);
+        $products = Product::paginate(5);
         $products = array('products' => $products , 'is' => true);
         return view('products.index', $products);
       }
@@ -31,12 +31,12 @@ class ProductController extends Controller
     {
       $method = $request->method();
       if ($request->ajax() && $request->isMethod('get')) {
-        $products = Product::paginate(1);
+        $products = Product::paginate(5);
         $products = array('products' => $products , 'is' => false);
         $view = view('categories.index', $products)->render();
         return response()->json(['html'=>$view]);
       } else {
-        $products = Product::paginate(1);
+        $products = Product::paginate(5);
         $products = array('products' => $products , 'is' => true);
         return view('categories.index',  $products);
       }
@@ -105,9 +105,23 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+      $id = $request->input('ref');
+      $product = Product::find($id);
+      $this->validate(request(), [
+        'name' => 'required',
+        'price' => 'required|numeric'
+      ]);
+      $product->name = $request->get('name');
+      $product->price = $request->get('price');
+      $product->save();
+      $result = array('success' => true,
+                      'success_message' => 'Product updated Successfully' ,
+                      'rawData' =>$_POST,
+                      'target'  => "#tableRow".$id
+                    );
+      return  response($result);
     }
 
     /**

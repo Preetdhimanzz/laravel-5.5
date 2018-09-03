@@ -1,28 +1,30 @@
 $(document).ready(function() {
-    $(document).on('click', 'button[type="submit"] , input[type="submit"] ', function() {
-        var minPhoneLen = 10;
-        var maxPhoneLen = 15;
-        $.validator.addMethod("noSpace", function(value, element, param) {
-            //      	return value.indexOf(" ") >= 0 && value != "";
-            return $.trim(value).length >= param;
 
-        }, "No space please and don't leave it empty");
-        $.validator.addMethod("greaterThan",
-            function(value, element, param) {
-                var $min = $(param);
-                if (this.settings.onfocusout) {
-                    $min.off(".validate-greaterThan").on("blur.validate-greaterThan", function() {
-                        $(element).valid();
-                    });
-                }
-                return parseInt(value) > parseInt($min.val());
-            }, "Max must be greater than min");
-        jQuery.validator.addMethod("nameRegex", function(value, element) {
-            return this.optional(element) || /^[a-z\ \s]+$/i.test(value);
-        }, "felid must contain only letters & space");
-        /*$.validator.addMethod('minStrict', function (value, el, param) {
-            return value > param;
-        },"Rate should be greater then 0.00");*/
+  var minPhoneLen = 10;
+  var maxPhoneLen = 15;
+  $.validator.addMethod("noSpace", function(value, element, param) {
+      return $.trim(value).length >= param;
+  }, "No space please and don't leave it empty");
+  $.validator.addMethod("greaterThan",
+      function(value, element, param) {
+          var $min = $(param);
+          if (this.settings.onfocusout) {
+              $min.off(".validate-greaterThan").on("blur.validate-greaterThan", function() {
+                  $(element).valid();
+              });
+          }
+          return parseInt(value) > parseInt($min.val());
+      }, "Max must be greater than min");
+  jQuery.validator.addMethod("nameRegex", function(value, element) {
+      return this.optional(element) || /^[a-z\ \s]+$/i.test(value);
+  }, "felid must contain only letters & space");
+  $.validator.addMethod('minStrict', function (value, el, param) {
+      return value > param;
+  },"Rate should be greater then 0.00");
+
+
+
+
         /*====================Start login form validation================= */
         var site_url = $('#site_url').val();
         $("#login-form").validate({
@@ -165,28 +167,29 @@ $(document).ready(function() {
             }
         });
 
-    });
-
-
 });
 
 function formSubmit(form) {
     $.ajax({
-        url: form.action,
-        type: form.method,
-        //data        : $(form).serialize(),
-        data: new FormData(form),
-        contentType: false,
-        cache: false,
-        processData: false,
-        dataType: "json",
-        beforeSend: function() {
+        url         : form.action,
+        type        : form.method,
+        data        : new FormData(form),
+        contentType : false,
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+        },
+        cache       : false,
+        processData : false,
+        dataType    : "json",
+        beforeSend  : function() {
             $('#' + form.id +" input[type=submit]").attr("disabled", "disabled");
             $('#' + form.id +" button[type=submit]").attr("disabled", "disabled");
             $(".loader_div").show();
         },
-        complete: function() {
+        complete    : function() {
             $(".loader_div").hide();
+            $("input[type=submit]").removeAttr("disabled");
+            $("button[type=submit]").removeAttr("disabled")
         },
         success: function(response) {
             var appendTo = '';
@@ -195,14 +198,26 @@ function formSubmit(form) {
                 $("input[type=submit]").removeAttr("disabled");
                 $("button[type=submit]").removeAttr("disabled")
             }
-            $("button[type=submit]").removeAttr("disabled");
-            // $("input[type=submit]").removeAttr("disabled");
-            iziToast.destroy();
             var delayTime = 3000;
             if (response.delayTime)
                 delayTime = response.delayTime;
             if (response.success) {
                 toster('Success', response.success_message, delayTime);
+                if (response.rawData) {
+                  $.each(response.rawData, function(index, value) {
+                      $(response.target).find("."+index).html(value);
+                  });
+                  $(response.target).addClass('highlight');
+                  if (typeof ($(response.target).find('td').find('a').attr('data-modal')) == "undefined") {
+                    jQuery('.hasEditArea').hide();
+                    jQuery('.listingArea').show();
+                  }else{
+                    jQuery('.updateModal').modal('hide');
+                  }
+                  setTimeout(function () {
+                    $(response.target).removeClass('highlight');
+                  },2000);
+                }
             } else {
                 if (response.formErrors) {
                     $.each(response.errors, function(index, value) {

@@ -60,7 +60,18 @@
                                 <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
                             </div>
                         </div>
-
+                        <div class="form-group row">
+                        <label for="role" class="col-md-4 col-form-label text-md-right">Role</label>
+                    
+                        <div class="col-md-6">
+                            <select name="role" class="form-control" >
+                                <option value="admin">Admin</option>
+                                <option value="agent">Agent</option>
+                                <option value="customer">Customer</option>
+                            </select> 
+                        </div>
+                    </div>
+                    
                         <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">
                                 <button type="submit" class="btn btn-primary">

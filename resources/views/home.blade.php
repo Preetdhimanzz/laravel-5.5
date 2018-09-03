@@ -4,7 +4,7 @@
 @include('layouts.header')
 @include('layouts.sidebar')
 @endif
-<div class="content-wrapper" style="min-height: 564px;">
+<div class="content-wrapper" style="min-height: 710px;">
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>

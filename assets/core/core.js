@@ -48,9 +48,6 @@
         var asynLoad          = ".router";
         var paginatortarget   = '.pagination li a';
         var triggerEdit       = '.isEditState';
-        var contentToLoad     = '.hasEditArea';
-        var modalContent      = '.updateModal';
-        var listingArea      = '.listingArea';
 
         jQuery(document).on('click', asynLoad, function(event) {
             event.preventDefault();
@@ -106,14 +103,13 @@
             var formData    = new FormData();
             var formaction  = '';
             var method      = '';
-            var $this       = $(this);
             jQuery(this).each(function() {
                 $.each(this.attributes, function()
                 {
                     if (this.specified)
                     {
                         if (this.name != "class") {
-                            // console.log(this.name.replace('data', ''), this.value);
+                            console.log(this.name.replace('data', ''), this.value);
                             var dataString = this.name.replace('data-', '');
                             if (dataString == 'href') {
                                 formaction = this.value;
@@ -134,13 +130,6 @@
             }
             $.ajax({
                 url: formaction,
-                beforeSend: function() {
-                    $(loader_div).show();
-                },
-                complete: function() {
-                    $(loader_div).hide();
-                    $this.attr('modal')
-                },
                 type: method,
                 data: formData,
                 contentType: false,
@@ -151,18 +140,7 @@
                 processData: false,
                 dataType: "json",
                 success: function(response) {
-
-                  if (typeof ($this.attr('data-modal')) == "undefined") {
-                    $(document).find(contentToLoad).html(response.html);
-                    $(document).find(listingArea).hide();
-                  }else{
-                    $(document).find(modalContent).modal('show');
-                    $(document).find(modalContent).html(response.html);
-                  }
-
-                    $.getScript( siteurl + "/assets/core/jquery.validate.min.js" );
-                    $.getScript( siteurl  + "/assets/core/form-validate.js" );
-                    $.getScript( siteurl  + "/assets/core/toaster.js" );
+                    $(document).find('.hasEditArea').html(response.html);
                 },
                 error : function(error) {
                     // DEBUG:  your error

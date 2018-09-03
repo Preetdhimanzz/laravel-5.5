@@ -1,25 +1,34 @@
-<form method="post" action="{{url('update-product')}}" id="update-product">
-        {{csrf_field()}}
-        <input name="_method" type="hidden" value="PATCH">
-        <div class="row">
-          <div class="col-md-4"></div>
-          <div class="form-group col-md-4">
-            <label for="name">Name:</label>
-            <input type="text" class="form-control" name="name" value="{{$product->name}}">
+<div class="modal-dialog">
+  <form method="post" action="{{url('update-product')}}" id="update-product">
+
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">×</span></button>
+        <h4 class="modal-title">Update Record</h4>
+    </div>
+    <div class="modal-body">
+      <input name="ref" type="hidden" value="{{$id}}">
+      <div class="row">
+        <div class="form-group col-md-8 col-md-offset-2">
+          <label for="name">Name:</label>
+          <input type="text" class="form-control" name="name" value="{{$product->name}}">
+        </div>
+      </div>
+      <div class="row">
+          <div class="form-group col-md-8 col-md-offset-2">
+            <label for="price">Price:</label>
+            <input type="text" class="form-control" name="price" value="{{$product->price}}">
           </div>
         </div>
-        <div class="row">
-          <div class="col-md-4"></div>
-            <div class="form-group col-md-4">
-              <label for="price">Price:</label>
-              <input type="text" class="form-control" name="price" value="{{$product->price}}">
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-4"></div>
-          <div class="form-group col-md-4">
-            <button type="submit" class="btn btn-success" style="margin-left:38px">Update Product</button>
-          </div>
-        </div>
-      </form>
+      </div>
+
+    <div class="modal-footer clearfix">
+      <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+      <button type="submit" class="btn btn-primary">Save changes</button>
+    </div>
+  </div>
+  <!-- /.modal-content -->
+</form>
+
+</div>

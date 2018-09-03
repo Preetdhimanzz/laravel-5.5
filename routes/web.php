@@ -25,6 +25,7 @@ Route::post('/submit', function (Request $request) {
 Route::resource('products','ProductController');
 Route::get('create','ProductController@create');
 Route::any('product-edit','ProductController@edit');
+Route::any('update-product','ProductController@update');
 Route::view('admin', 'home');
 Auth::routes();
 

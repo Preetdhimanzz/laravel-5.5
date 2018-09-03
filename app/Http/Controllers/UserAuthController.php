@@ -25,25 +25,29 @@ class UserAuthController extends Controller
     use AuthenticatesUsers;
     public function login(Request $request)
     {
-      if ($request->Ajax()) {
-      $email = $request->input('email');
-      $password = $request->input('password');
+      if ($request->Ajax()) 
+      {
+        $email = $request->input('email');
+        $password = $request->input('password');
         if(Auth::attempt(['email' =>  $email, 'password' =>$password]))
-           {
+        {
                 $request->session()->regenerate();
                 $response['success']         = true;
                 $response['success_message'] = 'Login successfu wait we Redirecting you to Dashboard';
                 $response['delayTime']       = 2000;
-                // $response['url']             = URL::to(url('/withSaleCustomer'));
+                $response['url']             = URL::to(url('/home'));
                 return response()->json($response);
-            }else{
+        }
+        else
+        {
               $response['success']         = false;
               $response['error_message'] = 'Authentication Failed Please try again';
               return response()->json($response);
-            }
-         }else{
-
+        }
+      }
+      else
+      {
            return view('auth.login');
-         }
+      }
     }
 }

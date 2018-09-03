@@ -9,7 +9,7 @@
   <section class="content-header"><h1>
     <!-- Content Header (Page header) -->
       <h1>
-        Products
+        Categories
         <small>Listing</small>
       </h1>
       <ol class="breadcrumb">
@@ -21,7 +21,7 @@
 
     <section class="content">
 
-        <div class="row">
+        <div class="row listingArea">
           <div class="col-xs-12">
             <div class="box">
               <div class="box-header">
@@ -50,11 +50,11 @@
                   </thead>
                   <tbody>
                     @foreach($products as $product)
-                    <tr>
+                    <tr id="tableRow{{$product['id']}}">
                       <td>{{$product['id']}}</td>
-                      <td>{{$product['name']}}</td>
-                      <td>{{$product['price']}}</td>
-                      <td><a href="{{action('ProductController@edit', $product['id'])}}" class="btn btn-warning">Edit</a></td>
+                      <td class="name">{{$product['name']}}</td>
+                      <td class="price">{{$product['price']}}</td>
+                      <td><a href="{{url('product-edit')}}"  data-type="post" data-objId="{{$product['id']}}"  class="isEditState btn btn-warning">Edit</a></td>
                       <td>
                         <form action="{{action('ProductController@destroy', $product['id'])}}" method="post">
                           {{csrf_field()}}
@@ -73,7 +73,9 @@
             <!-- /.box -->
           </div>
         </div>
+        <div class="hasEditArea">
 
+        </div>
       </section>
     </div>
     @if($is)
